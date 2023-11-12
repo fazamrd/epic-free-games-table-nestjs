@@ -11,17 +11,18 @@ datasource db {
 }
 
 model Users {
-  id Int @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
   username String
   password String
 }
 
 model Games {
-  id Int @id @default(autoincrement())
-  game_name String
-  date DateTime
-  meta_score Int?
-  user_score Int?
+  id             Int      @id @default(autoincrement())
+  game_name      String
+  game_url       String
+  date           DateTime
+  meta_score     Int?
+  user_score     Int?
   critic_reviews Int?
-  user_reviews Int?
+  user_reviews   Int?
 }
