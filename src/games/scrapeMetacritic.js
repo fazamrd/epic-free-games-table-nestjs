@@ -1,20 +1,21 @@
 import * as puppeteer from "puppeteer";
 
 (async () => {
+  let data = {}
   // Launch the browser and open a new blank page
   // headless must be false to get game data
   const browser = await puppeteer.launch({
-    headless: "new"
+    headless: false
   });
   const page = await browser.newPage();
 
   // Navigate the page to a URL
-  await page.goto('https://www.metacritic.com/search/earthlock/');
+  await page.goto('https://www.metacritic.com/search/dredge/');
 
   // Wait and click on first result
   const firstGameSelector = '.c-pageSiteSearch-results-item';
   await page.waitForSelector(firstGameSelector);
-  page.waitForNavigation(), // Waits for the next navigation event
+  // page.waitForNavigation(), // Waits for the next navigation event
   page.click(firstGameSelector),
   
   // Get critic score, user score, number of critic reviews and number of user reviews
@@ -26,8 +27,17 @@ import * as puppeteer from "puppeteer";
     const userRating = await page.evaluate(el => el.querySelector("div.c-productHero_scoreInfo.g-inner-spacing-top-medium.g-outer-spacing-bottom-medium.g-outer-spacing-top-medium > div.c-productScoreInfo.u-clearfix > div.c-productScoreInfo_scoreContent.u-flexbox.u-flexbox-alignCenter.u-flexbox-justifyFlexEnd.g-width-100.u-flexbox-nowrap > div.c-productScoreInfo_scoreNumber.u-float-right > div > div > span").textContent, rating)
     const criticNumber = await page.evaluate(el => el.querySelector("a > span").textContent.split(' ')[2], rating)
     const userNumber = await page.evaluate(el => el.querySelector("div.c-productHero_scoreInfo.g-inner-spacing-top-medium.g-outer-spacing-bottom-medium.g-outer-spacing-top-medium > div.c-productScoreInfo.u-clearfix > div.c-productScoreInfo_scoreContent.u-flexbox.u-flexbox-alignCenter.u-flexbox-justifyFlexEnd.g-width-100.u-flexbox-nowrap > div.c-productScoreInfo_text.g-outer-spacing-right-auto > span.c-productScoreInfo_reviewsTotal.u-block > a > span").textContent.split(' ')[2], rating)
-    console.log([criticRating, userRating, criticNumber, userNumber])
+    data = {criticRating: criticRating, userRating: userRating, criticNumber: criticNumber, userNumber: userNumber}
+    console.log(data)
   }
+  
+  // const genreSelectors = await page.$$('.c-gameDetails_sectionContainer')
+  // for (const genreSelector of genreSelectors) {
+  //   const gameGenre = await page.evaluate(el => el.querySelector("span").textContent, genreSelector)
+  //   data["gameGenre"] = gameGenre
+  //   console.log(data)
+  // }
+  
 
   await browser.close();
 })();

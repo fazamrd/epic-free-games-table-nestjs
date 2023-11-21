@@ -19,5 +19,5 @@ import * as puppeteer from "puppeteer";
     console.log(gameName)
   }  
 
-  // await browser.close();
+  await browser.close();
 })();
